@@ -1,122 +1,680 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GIT 1 • Study Tracker</title>
+<title>GIT 1 Study Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f5f8fc;--card:#fff;--text:#17324d;--muted:#6f8192;--line:#dce6ef;--accent:#2f6f9f;--accent2:#72a8c9}
-*{box-sizing:border-box} body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:var(--text)}
-.wrap{max-width:1050px;margin:auto;padding:24px 14px 50px}
-header{background:linear-gradient(135deg,#244f73,#4f89b1);color:white;border-radius:22px;padding:25px 22px;box-shadow:0 8px 25px #17324d22}
-h1{margin:0 0 6px;font-size:29px} .sub{opacity:.9}
-.summary{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:center;margin-top:20px}
-.circle{width:120px;height:120px;border-radius:50%;background:#ffffff22;border:7px solid #fff8;display:grid;place-items:center;font-size:28px;font-weight:800}
-.bar{height:13px;background:#ffffff35;border-radius:99px;overflow:hidden}.fill{height:100%;background:white;width:0%;transition:.25s}
-.stats{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.pill{background:#fff2;color:white;padding:7px 10px;border-radius:99px;font-size:13px}
-.section{background:var(--card);margin-top:18px;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 3px 14px #17324d0b}
-.section h2{margin:0;padding:17px 18px;background:#edf4f9;font-size:19px}.chapter{padding:0 18px 12px}.chapter h3{font-size:16px;margin:18px 0 9px;color:#315f80}
-.item{border:1px solid var(--line);border-radius:13px;padding:12px;margin:8px 0;background:#fff}
-.topic{font-weight:650;margin-bottom:9px;line-height:1.35}
-.checks{display:flex;gap:14px;flex-wrap:wrap}.checks label{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:5px}
-input{accent-color:var(--accent);width:17px;height:17px}
-footer{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:10px;flex-wrap:wrap}
-button{border:0;border-radius:12px;padding:10px 14px;background:#244f73;color:#fff;font-weight:700;cursor:pointer}button.secondary{background:#e8eef4;color:#31536c}
-.note{width:100%;min-height:100px;border:1px solid var(--line);border-radius:13px;padding:12px;font:inherit;resize:vertical}
-.small{color:var(--muted);font-size:12px}
-@media(max-width:650px){.summary{grid-template-columns:1fr;text-align:center}.circle{margin:auto}.bar{text-align:left}.stats{justify-content:center}.item{padding:11px}.checks{gap:9px}}
+:root{
+  --bg:#F2F5F6; --card:#FFFFFF; --ink:#12232B; --muted:#586B74; --line:#D8E1E5;
+  --accent:#0E7C86; --accent-ink:#FFFFFF; --soft:#E7F1F2; --shadow:rgba(18,35,43,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E171B; --card:#15222A; --ink:#E8F0F2; --muted:#97AAB3; --line:#27373F;
+    --accent:#3CC0CB; --accent-ink:#06272B; --soft:#173139; --shadow:rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E171B; --card:#15222A; --ink:#E8F0F2; --muted:#97AAB3; --line:#27373F;
+  --accent:#3CC0CB; --accent-ink:#06272B; --soft:#173139; --shadow:rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.5 "Figtree",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:22px 16px 72px}
+h1,h2,.big,.s-name{font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+h1{font-size:clamp(30px,8vw,44px);line-height:1.02;margin:6px 0 8px;font-weight:700;letter-spacing:-.015em}
+.lede{color:var(--muted);margin:0 0 22px;max-width:54ch}
+
+/* hero */
+.hero-row{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
+.big{font-size:68px;line-height:.9;font-weight:700;letter-spacing:-.03em;display:flex;align-items:baseline}
+.big small{font-size:26px;color:var(--muted);margin-left:2px;font-weight:600}
+.biglabel{color:var(--muted);font-size:15px}
+.segs{display:flex;gap:4px;height:16px}
+.seg{flex:var(--n) 1 0;min-width:6px;background:var(--line);border-radius:5px;overflow:hidden}
+.seg i{display:block;height:100%;width:0;background:var(--sc);transition:width .35s ease}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin:10px 0 0;padding:0;list-style:none;font-size:12.5px;color:var(--muted)}
+.legend li{display:flex;align-items:center;gap:6px}
+.legend b{width:9px;height:9px;border-radius:3px;background:var(--sc);display:inline-block}
+
+.facts{display:grid;grid-template-columns:repeat(4,1fr);margin:22px 0 6px;
+  background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.facts div{padding:12px 14px;border-left:1px solid var(--line)}
+.facts div:first-child{border-left:0}
+.facts b{display:block;font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:22px;line-height:1.15}
+.facts span{font-size:13px;color:var(--muted)}
+@media (max-width:560px){
+  .facts{grid-template-columns:repeat(2,1fr)}
+  .facts div:nth-child(3){border-left:0}
+  .facts div:nth-child(n+3){border-top:1px solid var(--line)}
+}
+
+/* assessments */
+.dates{margin:22px 0 4px}
+.dates h2{font-size:17px;margin:0 0 8px;font-weight:600}
+.dates ul{list-style:none;margin:0;padding:0;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.dates li{display:flex;justify-content:space-between;gap:12px;padding:10px 14px;border-top:1px solid var(--line);font-size:15px}
+.dates li:first-child{border-top:0}
+.dates .when{color:var(--muted);white-space:nowrap}
+.dates .soon{color:var(--accent);font-weight:600}
+
+/* toolbar */
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:14px 0 10px;margin-top:10px}
+.search{width:100%;height:44px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);
+  font:inherit;padding:0 14px}
+.search::placeholder{color:var(--muted)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.tools{display:flex;gap:8px;margin-left:auto}
+.chip{appearance:none;-webkit-appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink);
+  font:inherit;font-size:14px;font-weight:500;min-height:38px;padding:0 13px;border-radius:999px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip.ghost{background:transparent}
+.chip:focus-visible,.search:focus-visible,.s-head:focus-visible,.note-box:focus-visible,.step:focus-visible,.btn:focus-visible{
+  outline:3px solid var(--accent);outline-offset:2px}
+.count{font-size:12.5px;opacity:.8}
+
+/* subjects */
+.subject{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--sc);border-radius:12px;
+  margin:12px 0;overflow:hidden;box-shadow:0 1px 2px var(--shadow)}
+.s-head{all:unset;box-sizing:border-box;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;
+  column-gap:12px;row-gap:8px;width:100%;padding:14px 16px;cursor:pointer}
+.s-name{font-size:20px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
+.s-side{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px}
+.chev{width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s}
+.subject.open .chev,.subject.force .chev{transform:rotate(225deg)}
+.s-bar{grid-column:1 / -1;height:5px;background:var(--line);border-radius:3px;overflow:hidden}
+.s-bar i{display:block;height:100%;width:0;background:var(--sc);transition:width .3s}
+.list{display:none}
+.subject.open .list,.subject.force .list{display:block}
+
+.lec{padding:14px 16px;border-top:1px solid var(--line)}
+.lec-head{display:flex;gap:12px;align-items:flex-start}
+.no{flex:0 0 auto;min-width:42px;height:28px;padding:0 8px;border-radius:8px;display:grid;place-items:center;
+  font-size:13px;font-weight:600;background:color-mix(in srgb,var(--sc) 16%,transparent);color:var(--ink)}
+.lec.done .no{background:var(--sc);color:#fff}
+.lec-info{min-width:0;flex:1}
+.lec-title{font-weight:500;line-height:1.35}
+.lec.done .lec-title{color:var(--muted)}
+.lec-meta{display:flex;flex-wrap:wrap;gap:0 14px;font-size:13.5px;color:var(--muted);margin-top:2px}
+.ctrls{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0 0 54px}
+.chip.sm{min-height:34px;padding:0 11px;font-size:13.5px}
+.grp{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:0 4px 0 12px;min-height:34px}
+.grp .gl{font-size:13px;color:var(--muted)}
+.grp output{min-width:22px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+.step{all:unset;box-sizing:border-box;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+  cursor:pointer;font-size:18px;line-height:1;color:var(--ink);background:var(--soft)}
+.step:active{transform:scale(.94)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.chip.on .dot{background:var(--accent-ink)}
+.note-box{display:block;width:calc(100% - 54px);margin:10px 0 0 54px;min-height:78px;resize:vertical;
+  font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+@media (max-width:480px){
+  .ctrls,.note-box{margin-left:0}
+  .note-box{width:100%}
+}
+.empty{text-align:center;color:var(--muted);padding:36px 12px}
+.foot{color:var(--muted);font-size:13.5px;margin-top:28px;max-width:60ch}
+
+/* modal */
+.veil{position:fixed;inset:0;background:rgba(6,14,18,.55);display:grid;place-items:center;padding:16px;z-index:20}
+.modal{width:100%;max-width:520px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:20px}
+.modal h2{margin:0 0 8px;font-size:20px}
+.modal p{margin:0 0 12px;color:var(--muted);font-size:15px}
+.modal textarea{width:100%;min-height:150px;font:12.5px/1.4 ui-monospace,Menlo,Consolas,monospace;color:var(--ink);
+  background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;resize:vertical}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;justify-content:flex-end}
+.btn{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:600;
+  min-height:42px;padding:0 16px;border-radius:10px;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.danger{background:#B3261E;border-color:#B3261E;color:#fff}
+.msg{min-height:20px;font-size:14px;color:var(--accent);margin-top:8px}
+@media (prefers-reduced-motion: reduce){*{transition:none !important}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header>
-<h1>📚 GIT 1 • Study Tracker</h1>
-<div class="sub">Track your studying, revision & questions — automatically saved on this device.</div>
-<div class="summary">
-<div class="circle" id="percent">0%</div>
-<div><div class="bar"><div class="fill" id="fill"></div></div>
-<div class="stats"><span class="pill" id="done">0 / 0</span><span class="pill" id="studied">Studied: 0</span><span class="pill" id="revised">Revised: 0</span><span class="pill" id="questions">Questions: 0</span></div></div>
-</div>
-</header>
+  <header>
+    <h1>GIT 1 study tracker</h1>
+    <p class="lede">Theory lectures from weeks 1 to 7 (19 Sep to 4 Nov 2026), grouped by subject. Your progress saves in this browser.</p>
 
-<div id="content"></div>
+    <div class="hero-row">
+      <div class="big"><span id="pct">0</span><small>%</small></div>
+      <div class="biglabel">of lectures studied</div>
+    </div>
+    <div class="segs" id="segs" role="img" aria-label="Studied lectures by subject"></div>
+    <ul class="legend" id="legend"></ul>
 
-<div class="section" style="padding:18px">
-<h2 style="background:none;padding:0 0 10px">📝 Notes</h2>
-<textarea id="notes" class="note" placeholder="Write anything you want to remember..."></textarea>
-<div class="small" style="margin-top:7px">Your checkmarks and notes are saved automatically in this browser.</div>
-<footer><span class="small">GIT 1 • You’ve got this 💪</span><button class="secondary" onclick="resetAll()">Reset tracker</button></footer>
+    <div class="facts" aria-live="polite">
+      <div><b id="fStudied">0/0</b><span>Studied</span></div>
+      <div><b id="fRev">0/0</b><span>Revisions done</span></div>
+      <div><b id="fQ">0</b><span>Questions solved</span></div>
+      <div><b id="fAcc">-</b><span>Correct answers</span></div>
+    </div>
+  </header>
+
+  <section class="dates">
+    <h2>Coming up</h2>
+    <ul id="dates"></ul>
+  </section>
+
+  <div class="bar">
+    <input class="search" id="search" type="search" placeholder="Search lectures, doctors or subjects" aria-label="Search lectures">
+    <div class="filters" id="filters">
+      <button type="button" class="chip on" data-f="all">All <span class="count" id="cAll"></span></button>
+      <button type="button" class="chip" data-f="study">To study <span class="count" id="cStudy"></span></button>
+      <button type="button" class="chip" data-f="revise">To revise <span class="count" id="cRevise"></span></button>
+      <button type="button" class="chip" data-f="done">Done <span class="count" id="cDone"></span></button>
+      <div class="tools">
+        <button type="button" class="chip ghost" id="btnBackup">Backup</button>
+        <button type="button" class="chip ghost" id="btnReset">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <main id="subjects"></main>
+  <p class="empty" id="empty" hidden>No lectures match. Clear the search or pick another filter.</p>
+
+  <p class="foot">Studied and revised are separate: tick Studied after the first pass, then R1, R2 and R3 for each revision round. A lecture counts as Done once it is studied and revised three times. To move your progress to another device or browser, use Backup.</p>
 </div>
+
+<div class="veil" id="veil" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle" id="modal"></div>
 </div>
 
 <script>
-const data = [
-["Unit I – Nutrition Overview (N)","",[
-"Biochemistry: Macronutrients (dietary carbohydrates, proteins & fats)",
-"Lipogenesis and obesity",
-"Micronutrients (vitamins & minerals)"
-]],
-["Unit II – Upper GIT (U)","Chapter 1 – Oral cavity, salivary glands & oesophagus",[
-"Anatomy: Anatomical structure of oral cavity, salivary glands and esophagus",
-"Anatomy: Embryological development of oral cavity, pharynx and salivary glands",
-"Histology: Histological structure of oral cavity, pharyngeal & esophageal wall and salivary glands",
-"Physiology: General functions and control mechanisms of digestive system",
-"Physiology: Chewing, salivary secretion & control mechanisms",
-"Physiology: Swallowing, esophageal motility & disorders",
-"Microbiology: General microbial infections of GIT",
-"Microbiology: Microbial infections of salivary glands & esophagus",
-"Pathology: Pathological features of oral cavity, salivary glands & esophageal diseases"
-]],
-["Unit II – Upper GIT (U)","Chapter 2 – Stomach",[
-"Anatomy (+ duodenum): Anatomical structure of anterior abdominal wall",
-"Anatomy (+ duodenum): Anatomical structure of abdominal viscera",
-"Anatomy (+ duodenum): Embryological development of foregut",
-"Histology: Histological structure of gastric wall",
-"Physiology: Mechanisms of gastric motility and vomiting",
-"Physiology: Regulatory mechanisms & functions of gastric secretion",
-"Microbiology: Microbial gastritis",
-"Pathology: Pathological features of gastric diseases",
-"Pharmacology: Drug therapy of vomiting",
-"Pharmacology: Drug therapy of acid-related GIT diseases"
-]]
+(function(){
+"use strict";
+var KEY = "git1-tracker-v1";
+
+var SUBJ = [
+  {id:"anat",  n:"Anatomy",      c:"#C2364A"},
+  {id:"hist",  n:"Histology",    c:"#7B4BC4"},
+  {id:"phys",  n:"Physiology",   c:"#157F8C"},
+  {id:"bio",   n:"Biochemistry", c:"#A8690C"},
+  {id:"path",  n:"Pathology",    c:"#3346D6"},
+  {id:"pharm", n:"Pharmacology", c:"#237A47"},
+  {id:"micro", n:"Microbiology", c:"#C2560F"},
+  {id:"para",  n:"Parasitology", c:"#7C5A2E"},
+  {id:"eth",   n:"Ethics",       c:"#4E5F6B"},
+  {id:"clin",  n:"Clinical",     c:"#0B6B63"}
 ];
-const key="git1TrackerV1";
-let state=JSON.parse(localStorage.getItem(key)||'{}');
-const content=document.getElementById("content");
-let n=0;
-data.forEach((u,ui)=>{
- let sec=document.createElement("div");sec.className="section";
- sec.innerHTML=`<h2>${u[0]}</h2><div class="chapter"><h3>${u[1]}</h3></div>`;
- let ch=sec.querySelector(".chapter");
- u[2].forEach((topic)=>{
-   const id=n++;
-   const item=document.createElement("div");item.className="item";
-   item.innerHTML=`<div class="topic">${topic}</div><div class="checks">
-   <label><input type="checkbox" data-id="${id}" data-type="s"> Studied</label>
-   <label><input type="checkbox" data-id="${id}" data-type="r"> Revised</label>
-   <label><input type="checkbox" data-id="${id}" data-type="q"> Questions</label>
-   </div>`;
-   ch.appendChild(item);
- });
- content.appendChild(sec);
+
+/* [subject, lecture no., title, doctor, date] */
+var RAW = [
+ /* Week 1 */
+ ["anat","1","Mouth, tongue & palate","Dr Ahmed Desouki","2026-09-20"],
+ ["anat","2","Pharynx & esophagus","Dr Ahmed Yehia","2026-09-20"],
+ ["hist","3","Structure of oral cavity (1)","Dr Dina Rashad","2026-09-20"],
+ ["phys","4–5","General functions & control of the digestive system; mechanisms of chewing and salivary secretion","Prof Nehal Gamil","2026-09-20"],
+ ["anat","6","Salivary glands (1)","Dr Ahmed Desouki","2026-09-21"],
+ ["anat","7","Salivary glands (2)","Dr Ahmed Desouki","2026-09-21"],
+ ["hist","8","Oesophagus","Dr Nesma Mohamed","2026-09-21"],
+ ["hist","9","Stomach","Dr Nesma Mohamed","2026-09-21"],
+ ["eth","—","Introduction to medical ethics","","2026-09-22"],
+ ["phys","10","Swallowing","Prof Nehal Gamil","2026-09-22"],
+ ["anat","11","Embryology of mouth, palate, tongue & salivary glands","Dr Kawther Hafez","2026-09-22"],
+ ["bio","12","Overview of nutrition, macronutrients & dietary carbohydrate","Dr Sara Elsayed","2026-09-22"],
+ ["bio","13","Dietary protein and fat","Dr Sara Elsayed","2026-09-24"],
+ ["phys","14","Stomach motility & vomiting","Dr Gehan El-Salamony","2026-09-24"],
+ ["path","15","Diseases of mouth, tongue & pharynx (salivary)","Dr Esraa Adel","2026-09-24"],
+ ["path","16","Diseases of esophagus","Dr Esraa Adel","2026-09-24"],
+ /* Week 2 */
+ ["phys","17–18","Gastric secretion, control of gastric secretion & disorders","Dr Gehan El-Salamony","2026-09-27"],
+ ["anat","19–20","Abdominal wall I & II (muscles, rectus sheath; neurovascular supply, inguinal canal)","Dr Sara Shawky","2026-09-27"],
+ ["bio","21","Lipogenesis and obesity","Dr Sara Elsayed","2026-09-28"],
+ ["para","22","Parasites affecting the liver (1)","Prof Heba Abdel Atty","2026-09-28"],
+ ["anat","23","Visceral arrangement & peritoneum","Dr Heba Mohammed","2026-09-28"],
+ ["anat","24","Stomach & coeliac artery","Dr Ahmed Yehia","2026-09-28"],
+ ["pharm","25","Antiemetics","Dr Omnya Aly","2026-09-29"],
+ ["anat","26","Lesser sac & omenta","Dr Menna Faisal","2026-09-29"],
+ ["anat","27","Duodenum & pancreas","Dr Menna Faisal","2026-09-29"],
+ ["path","28","Diseases of stomach","Dr Rana Ahmed","2026-10-01"],
+ ["path","29","Tumors of stomach","Dr Rana Ahmed","2026-10-01"],
+ ["para","30","Parasites affecting the liver (2)","Prof Laila El Husseiny","2026-10-01"],
+ /* Week 3 */
+ ["clin","—","Clinical session","","2026-10-04"],
+ ["bio","31–32","Micronutrients (vitamins & minerals)","Dr Marwa Mostafa","2026-10-04"],
+ ["phys","33","Pancreatic secretion & disorders","Prof Fatma Lebda","2026-10-05"],
+ ["micro","34","GIT infection: salivary glands, oesophagus, gastritis","Prof Makram Fahmy","2026-10-05"],
+ ["para","35","Parasites affecting the liver (3)","Prof Laila El Husseiny","2026-10-05"],
+ ["pharm","36","Drug therapy of acid-related GIT disorders (1)","Dr Omnya Aly","2026-10-06"],
+ ["pharm","37","Drug therapy of acid-related GIT disorders (2)","Dr Omnya Aly","2026-10-06"],
+ ["anat","38","Liver & biliary system","Dr Menna Faisal","2026-10-06"],
+ ["pharm","39","Drug therapy of acid-related GIT disorders (3)","Dr Omnya Aly","2026-10-06"],
+ /* Week 4 */
+ ["phys","40","Functions of the liver & bile","Prof Fatma Lebda","2026-10-11"],
+ ["anat","41","Portal vein & portosystemic anastomosis","Prof Hany Waheeb","2026-10-11"],
+ ["para","42","Trematode infection of the small intestine","Prof Fatma Zahran","2026-10-11"],
+ ["para","43","Cestode infection of the small intestine (1)","Prof Ayman Nabil","2026-10-11"],
+ ["phys","44","Enterohepatic circulation, control of bile & gall bladder, splanchnic circulation","Prof Fatma Lebda","2026-10-12"],
+ ["anat","45","Embryology of stomach, duodenum, liver & pancreas","Dr Kawther Hafez","2026-10-12"],
+ ["hist","46–47","Liver, gall bladder & exocrine pancreas","Dr Nesma Mohamed","2026-10-12"],
+ ["bio","48","Biochemical basis of fatty liver","Dr Sara Elsayed","2026-10-13"],
+ ["path","49","Liver: viral hepatitis","Dr Laila Nabegh","2026-10-13"],
+ ["micro","50–51","Hepatitis viruses","Prof Rasha Nasr","2026-10-13"],
+ ["path","52","Liver: chronic hepatitis","Dr Laila Nabegh","2026-10-15"],
+ ["path","53","Liver: cirrhosis","Dr Laila Nabegh","2026-10-15"],
+ ["para","54","Cestode infection of the small intestine (2)","Prof Ayman Nabil","2026-10-15"],
+ ["bio","55","Heme catabolism, uronic acid pathway, hyperbilirubinemia & jaundice","Dr Mai","2026-10-15"],
+ /* Week 5 */
+ ["para","56–57","Nematode infection of the small intestine (1, 2)","Prof Gehan Mostafa","2026-10-18"],
+ ["path","58","Bilharziasis, portal hypertension & jaundice","Dr Laila Nabegh","2026-10-18"],
+ ["para","59","Nematode infection of the small intestine (3)","Prof Gehan Mostafa","2026-10-18"],
+ ["clin","—","Clinical session","","2026-10-19"],
+ ["path","60","Liver: tumors","Dr Laila Nabegh","2026-10-19"],
+ ["bio","61","Synthesis of bile acids and salts","Dr Marian Maher","2026-10-19"],
+ ["pharm","62","Hepatic failure","Dr Omnya Aly","2026-10-20"],
+ ["pharm","63","Liver transplantation","Dr Omneya","2026-10-20"],
+ ["path","64","Gall bladder diseases","Dr Eman Al Gammal","2026-10-20"],
+ ["bio","65","Purine & pyrimidine metabolism (1)","Dr Mai","2026-10-20"],
+ ["bio","66","Purine & pyrimidine metabolism (2)","Dr Mai","2026-10-22"],
+ ["path","67","Pancreatic diseases","Dr Eman Al Gammal","2026-10-22"],
+ ["anat","68","Small intestine, mesentery & superior mesenteric artery","Prof Iman Abdel Aal","2026-10-22"],
+ ["para","69","Nematode infection of the small intestine (4)","Prof Heba Abdel Kader","2026-10-22"],
+ /* Week 6 */
+ ["hist","70","Small intestine","Dr Dina Rashad","2026-10-25"],
+ ["hist","71","Large intestine","Dr Dina Rashad","2026-10-25"],
+ ["phys","72","Small intestine motility & secretion","Dr Doaa AbdelWahed","2026-10-25"],
+ ["phys","73","Small intestine absorption (1)","Dr Doaa AbdelWahed","2026-10-25"],
+ ["para","74","Nematode infection of the small intestine (5)","Prof Heba Abdel Kader","2026-10-26"],
+ ["para","75","Protozoal infection of the small intestine","Dr Sabah Ahmed","2026-10-26"],
+ ["anat","76–77","Posterior abdominal wall (lumbar vertebrae, iliac bone); large intestine & inferior mesenteric artery, sigmoid colon","Dr Aya Baraka","2026-10-26"],
+ ["phys","78","Small intestine absorption (2)","Dr Doaa AbdelWahed","2026-10-27"],
+ ["phys","79","Large intestine motility, secretion & absorption","Dr Doaa AbdelWahed","2026-10-27"],
+ ["micro","80","Watery diarrhea","Prof Abeer Abd El Fatah","2026-10-27"],
+ ["micro","81–82","Bloody diarrhea","Prof Abeer Abd El Fatah","2026-10-28"],
+ ["micro","83","Enteric fever","Prof Abeer Abd El Fatah","2026-10-28"],
+ ["anat","84","Rectum & anal canal","Dr Ahmed Yehia","2026-10-28"],
+ ["path","85","Small intestine: diseases","Dr Thanaa Helal","2026-10-29"],
+ ["path","86","Inflammatory bowel diseases","Dr Thanaa Helal","2026-10-29"],
+ ["para","87","Nematode infection of the large intestine","Dr Hala Sobhy","2026-10-29"],
+ ["anat","88","Development of midgut & hindgut","Dr Kawther Hafez","2026-10-29"],
+ /* Week 7 */
+ ["path","89","Colonic infections, dysentery","Dr Thanaa Helal","2026-11-01"],
+ ["path","90","Tumors of colon and anal canal","Dr Thanaa Helal","2026-11-01"],
+ ["para","91","Protozoal infection of the large intestine (1)","Prof Ayman Nabeel","2026-11-01"],
+ ["para","92","Protozoal infection of the large intestine (2)","Prof Ayman Nabeel","2026-11-01"],
+ ["pharm","93","Antiamoebic & antidiarrheal drugs","Dr Omnya Aly","2026-11-02"],
+ ["pharm","94","Treatment of constipation and IBS","Dr Omnya Aly","2026-11-02"],
+ ["path","95","Diseases of appendix","Dr Eman Al Gammal","2026-11-02"],
+ ["clin","—","Clinical session","","2026-11-02"]
+];
+
+var ASSESS = [
+  {d:"2026-10-10", t:"Continuous assessment GIT 1"},
+  {d:"2026-10-24", t:"Continuous assessment: research"},
+  {d:"2026-10-31", t:"Continuous assessment GIT 2"}
+];
+
+var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+var DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+var SMAP = {};
+SUBJ.forEach(function(s){ SMAP[s.id] = s; });
+
+var ROWS = RAW.map(function(r){
+  return {
+    id: r[0] + "-" + (r[1] === "—" ? r[4] : r[1]),
+    s: r[0], no: r[1], t: r[2], d: r[3], dt: r[4]
+  };
 });
-document.querySelectorAll("input[type=checkbox]").forEach(cb=>{
- const k=cb.dataset.id+"_"+cb.dataset.type; cb.checked=!!state[k];
- cb.addEventListener("change",()=>{state[k]=cb.checked;save();update()});
-});
-const notes=document.getElementById("notes"); notes.value=state.notes||"";
-notes.addEventListener("input",()=>{state.notes=notes.value;save()});
-function save(){localStorage.setItem(key,JSON.stringify(state))}
-function update(){
- const boxes=[...document.querySelectorAll("input[type=checkbox]")], done=boxes.filter(x=>x.checked).length;
- const total=boxes.length, pct=total?Math.round(done/total*100):0;
- document.getElementById("percent").textContent=pct+"%";document.getElementById("fill").style.width=pct+"%";
- document.getElementById("done").textContent=`${done} / ${total} completed`;
- for(const [type,id] of [["s","studied"],["r","revised"],["q","questions"]])
-   document.getElementById(id).textContent=(type==="s"?"Studied: ":type==="r"?"Revised: ":"Questions: ")+boxes.filter(x=>x.dataset.type===type&&x.checked).length;
+var BYID = {};
+ROWS.forEach(function(r){ BYID[r.id] = r; });
+
+/* ---------- storage ---------- */
+var data = {};
+function fresh(){ return {s:0, r:[0,0,0], c:0, w:0, n:""}; }
+function norm(x){
+  var o = fresh();
+  if(!x || typeof x !== "object") return o;
+  o.s = x.s ? 1 : 0;
+  if(Array.isArray(x.r)) for(var i=0;i<3;i++) o.r[i] = x.r[i] ? 1 : 0;
+  o.c = Math.max(0, Math.min(9999, parseInt(x.c,10) || 0));
+  o.w = Math.max(0, Math.min(9999, parseInt(x.w,10) || 0));
+  o.n = typeof x.n === "string" ? x.n.slice(0, 4000) : "";
+  return o;
 }
-function resetAll(){if(confirm("Reset all checkmarks and notes?")){state={};save();location.reload()}}
-update();
+try{
+  var raw = localStorage.getItem(KEY);
+  if(raw){
+    var parsed = JSON.parse(raw);
+    Object.keys(parsed || {}).forEach(function(k){ if(BYID[k]) data[k] = norm(parsed[k]); });
+  }
+}catch(e){}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(data)); }catch(e){}
+}
+function get(id){ return data[id] || fresh(); }
+function mut(id, fn){
+  var x = data[id] ? data[id] : (data[id] = fresh());
+  fn(x);
+  save();
+}
+function allRev(x){ return x.r[0] && x.r[1] && x.r[2]; }
+function isDone(x){ return !!(x.s && allRev(x)); }
+
+/* ---------- helpers ---------- */
+function esc(s){
+  return String(s).replace(/[&<>"]/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];
+  });
+}
+function fmtDate(iso){
+  var p = iso.split("-").map(Number);
+  var D = new Date(p[0], p[1]-1, p[2]);
+  return DAYS[D.getDay()] + " " + p[2] + " " + MONTHS[p[1]-1];
+}
+function $(sel, root){ return (root || document).querySelector(sel); }
+function $$(sel, root){ return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+
+/* ---------- build ---------- */
+function rowHTML(r){
+  var meta = "";
+  if(r.d) meta += '<span>' + esc(r.d) + '</span>';
+  meta += '<span>' + esc(fmtDate(r.dt)) + '</span>';
+  return '' +
+  '<div class="lec" data-id="' + r.id + '">' +
+    '<div class="lec-head">' +
+      '<span class="no">' + esc(r.no) + '</span>' +
+      '<div class="lec-info">' +
+        '<div class="lec-title">' + esc(r.t) + '</div>' +
+        '<div class="lec-meta">' + meta + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="ctrls">' +
+      '<button type="button" class="chip sm" data-a="s" aria-pressed="false">Studied</button>' +
+      '<button type="button" class="chip sm" data-a="r0" aria-pressed="false" aria-label="First revision">R1</button>' +
+      '<button type="button" class="chip sm" data-a="r1" aria-pressed="false" aria-label="Second revision">R2</button>' +
+      '<button type="button" class="chip sm" data-a="r2" aria-pressed="false" aria-label="Third revision">R3</button>' +
+      '<div class="grp" role="group" aria-label="Correct answers"><span class="gl">Right</span>' +
+        '<button type="button" class="step" data-a="c-" aria-label="One fewer right answer">−</button>' +
+        '<output data-role="c">0</output>' +
+        '<button type="button" class="step" data-a="c+" aria-label="One more right answer">+</button></div>' +
+      '<div class="grp" role="group" aria-label="Wrong answers"><span class="gl">Wrong</span>' +
+        '<button type="button" class="step" data-a="w-" aria-label="One fewer wrong answer">−</button>' +
+        '<output data-role="w">0</output>' +
+        '<button type="button" class="step" data-a="w+" aria-label="One more wrong answer">+</button></div>' +
+      '<button type="button" class="chip sm" data-a="n" aria-expanded="false">Note <i class="dot" hidden></i></button>' +
+    '</div>' +
+    '<textarea class="note-box" data-role="note" rows="3" maxlength="4000" placeholder="Notes for this lecture" aria-label="Notes" hidden></textarea>' +
+  '</div>';
+}
+
+var root = $("#subjects");
+SUBJ.forEach(function(sub){
+  var rows = ROWS.filter(function(r){ return r.s === sub.id; });
+  if(!rows.length) return;
+  var sec = document.createElement("section");
+  sec.className = "subject";
+  sec.dataset.s = sub.id;
+  sec.style.setProperty("--sc", sub.c);
+  sec.innerHTML =
+    '<button type="button" class="s-head" data-a="toggle" aria-expanded="false">' +
+      '<span class="s-name">' + esc(sub.n) + '</span>' +
+      '<span class="s-side"><span data-role="scount"></span><span class="chev" aria-hidden="true"></span></span>' +
+      '<span class="s-bar"><i data-role="sbar"></i></span>' +
+    '</button>' +
+    '<div class="list">' + rows.map(rowHTML).join("") + '</div>';
+  root.appendChild(sec);
+});
+
+/* hero segments + legend */
+var segs = $("#segs"), legend = $("#legend");
+SUBJ.forEach(function(sub){
+  var n = ROWS.filter(function(r){ return r.s === sub.id; }).length;
+  if(!n) return;
+  var seg = document.createElement("div");
+  seg.className = "seg"; seg.dataset.s = sub.id;
+  seg.style.setProperty("--n", n); seg.style.setProperty("--sc", sub.c);
+  seg.title = sub.n;
+  seg.innerHTML = "<i></i>";
+  segs.appendChild(seg);
+  var li = document.createElement("li");
+  li.style.setProperty("--sc", sub.c);
+  li.innerHTML = "<b></b>" + esc(sub.n) + " " + n;
+  legend.appendChild(li);
+});
+
+/* assessments */
+(function(){
+  var ul = $("#dates");
+  var t = new Date(); var today = new Date(t.getFullYear(), t.getMonth(), t.getDate());
+  ASSESS.forEach(function(a){
+    var p = a.d.split("-").map(Number);
+    var D = new Date(p[0], p[1]-1, p[2]);
+    var diff = Math.round((D - today) / 86400000);
+    var label = diff > 1 ? "in " + diff + " days" : diff === 1 ? "tomorrow" : diff === 0 ? "today" : "passed";
+    var li = document.createElement("li");
+    li.innerHTML = "<span>" + esc(a.t) + "</span><span class=\"when" + (diff >= 0 && diff <= 7 ? " soon" : "") + "\">" +
+      esc(fmtDate(a.d)) + ", " + label + "</span>";
+    ul.appendChild(li);
+  });
+})();
+
+/* ---------- paint ---------- */
+var filter = "all";
+
+function paintRow(el){
+  var id = el.dataset.id, x = get(id);
+  var bS = $('[data-a="s"]', el);
+  bS.classList.toggle("on", !!x.s); bS.setAttribute("aria-pressed", x.s ? "true" : "false");
+  for(var i=0;i<3;i++){
+    var b = $('[data-a="r' + i + '"]', el);
+    b.classList.toggle("on", !!x.r[i]); b.setAttribute("aria-pressed", x.r[i] ? "true" : "false");
+  }
+  $('[data-role="c"]', el).textContent = x.c;
+  $('[data-role="w"]', el).textContent = x.w;
+  el.classList.toggle("done", isDone(x));
+  $(".dot", el).hidden = !x.n;
+}
+
+function paintSubject(sec){
+  var id = sec.dataset.s;
+  var rows = ROWS.filter(function(r){ return r.s === id; });
+  var studied = rows.filter(function(r){ return get(r.id).s; }).length;
+  $('[data-role="scount"]', sec).textContent = studied + "/" + rows.length + " studied";
+  $('[data-role="sbar"]', sec).style.width = (rows.length ? studied / rows.length * 100 : 0) + "%";
+  var seg = $('.seg[data-s="' + id + '"]');
+  if(seg) $("i", seg).style.width = (rows.length ? studied / rows.length * 100 : 0) + "%";
+}
+
+function paintStats(){
+  var N = ROWS.length, studied = 0, rev = 0, c = 0, w = 0, toStudy = 0, toRevise = 0, done = 0;
+  ROWS.forEach(function(r){
+    var x = get(r.id);
+    if(x.s) studied++; else toStudy++;
+    rev += x.r[0] + x.r[1] + x.r[2];
+    c += x.c; w += x.w;
+    if(isDone(x)) done++;
+    else if(x.s) toRevise++;
+  });
+  $("#pct").textContent = N ? Math.round(studied / N * 100) : 0;
+  $("#fStudied").textContent = studied + "/" + N;
+  $("#fRev").textContent = rev + "/" + (N * 3);
+  $("#fQ").textContent = (c + w);
+  $("#fAcc").textContent = (c + w) ? Math.round(c / (c + w) * 100) + "%" : "-";
+  $("#cAll").textContent = N;
+  $("#cStudy").textContent = toStudy;
+  $("#cRevise").textContent = toRevise;
+  $("#cDone").textContent = done;
+}
+
+function paintAll(){
+  $$(".lec").forEach(paintRow);
+  $$(".subject").forEach(paintSubject);
+  paintStats();
+}
+
+function applyFilters(){
+  var q = $("#search").value.trim().toLowerCase();
+  var forced = !!q || filter !== "all";
+  var any = false;
+  $$(".subject").forEach(function(sec){
+    var vis = 0;
+    $$(".lec", sec).forEach(function(el){
+      var r = BYID[el.dataset.id], x = get(r.id);
+      var ok = true;
+      if(q) ok = (r.t + " " + r.d + " " + r.no + " " + SMAP[r.s].n).toLowerCase().indexOf(q) !== -1;
+      if(ok && filter === "study") ok = !x.s;
+      if(ok && filter === "revise") ok = !!x.s && !allRev(x);
+      if(ok && filter === "done") ok = isDone(x);
+      el.hidden = !ok;
+      if(ok) vis++;
+    });
+    sec.hidden = vis === 0;
+    sec.classList.toggle("force", forced);
+    if(vis) any = true;
+  });
+  $("#empty").hidden = any;
+}
+
+/* ---------- events ---------- */
+root.addEventListener("click", function(e){
+  var btn = e.target.closest("[data-a]");
+  if(!btn) return;
+  var a = btn.dataset.a;
+  if(a === "toggle"){
+    var sec = btn.closest(".subject");
+    var open = sec.classList.toggle("open");
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    return;
+  }
+  var el = btn.closest(".lec");
+  if(!el) return;
+  var id = el.dataset.id;
+  if(a === "n"){
+    var box = $('[data-role="note"]', el);
+    box.hidden = !box.hidden;
+    btn.setAttribute("aria-expanded", box.hidden ? "false" : "true");
+    if(!box.hidden){ box.value = get(id).n; box.focus(); }
+    return;
+  }
+  mut(id, function(x){
+    if(a === "s") x.s = x.s ? 0 : 1;
+    else if(a === "r0" || a === "r1" || a === "r2"){ var i = +a.charAt(1); x.r[i] = x.r[i] ? 0 : 1; }
+    else if(a === "c+") x.c = Math.min(9999, x.c + 1);
+    else if(a === "c-") x.c = Math.max(0, x.c - 1);
+    else if(a === "w+") x.w = Math.min(9999, x.w + 1);
+    else if(a === "w-") x.w = Math.max(0, x.w - 1);
+  });
+  paintRow(el);
+  paintSubject(el.closest(".subject"));
+  paintStats();
+});
+
+root.addEventListener("input", function(e){
+  if(!e.target.matches('[data-role="note"]')) return;
+  var el = e.target.closest(".lec");
+  var v = e.target.value;
+  mut(el.dataset.id, function(x){ x.n = v; });
+  $(".dot", el).hidden = !v;
+});
+
+$("#search").addEventListener("input", applyFilters);
+$("#filters").addEventListener("click", function(e){
+  var b = e.target.closest("[data-f]");
+  if(!b) return;
+  filter = b.dataset.f;
+  $$("#filters [data-f]").forEach(function(x){ x.classList.toggle("on", x === b); });
+  applyFilters();
+});
+
+/* ---------- modal ---------- */
+var veil = $("#veil"), modal = $("#modal"), lastFocus = null;
+function openModal(html, focusSel){
+  lastFocus = document.activeElement;
+  modal.innerHTML = html;
+  veil.hidden = false;
+  var f = $(focusSel || ".btn", modal);
+  if(f) f.focus();
+}
+function closeModal(){
+  veil.hidden = true; modal.innerHTML = "";
+  if(lastFocus && lastFocus.focus) lastFocus.focus();
+}
+veil.addEventListener("click", function(e){ if(e.target === veil) closeModal(); });
+document.addEventListener("keydown", function(e){ if(e.key === "Escape" && !veil.hidden) closeModal(); });
+
+function exportText(){
+  var out = {};
+  Object.keys(data).forEach(function(k){
+    var x = data[k];
+    if(x.s || x.r[0] || x.r[1] || x.r[2] || x.c || x.w || x.n) out[k] = x;
+  });
+  return JSON.stringify(out);
+}
+
+$("#btnBackup").addEventListener("click", function(){
+  openModal(
+    '<h2 id="mTitle">Backup and restore</h2>' +
+    '<p>Copy this text and keep it somewhere safe. To restore on another device, open the tracker there, paste the text below and press Restore. Restoring replaces the progress on that device.</p>' +
+    '<textarea id="bk" spellcheck="false" aria-label="Backup text"></textarea>' +
+    '<div class="msg" id="bkMsg" role="status"></div>' +
+    '<div class="row">' +
+      '<button type="button" class="btn" id="bkClose">Close</button>' +
+      '<button type="button" class="btn" id="bkRestore">Restore from text</button>' +
+      '<button type="button" class="btn primary" id="bkCopy">Copy backup</button>' +
+    '</div>', "#bkCopy");
+  var ta = $("#bk"), msg = $("#bkMsg");
+  ta.value = exportText();
+  $("#bkClose").addEventListener("click", closeModal);
+  $("#bkCopy").addEventListener("click", function(){
+    ta.value = exportText();
+    var done = function(){ msg.textContent = "Backup copied."; };
+    var fallback = function(){
+      ta.focus(); ta.select();
+      try{ document.execCommand("copy") ? done() : (msg.textContent = "Select the text above and copy it."); }
+      catch(err){ msg.textContent = "Select the text above and copy it."; }
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(ta.value).then(done, fallback);
+    } else fallback();
+  });
+  $("#bkRestore").addEventListener("click", function(){
+    var parsed;
+    try{ parsed = JSON.parse(ta.value); }catch(err){ msg.textContent = "That text is not a valid backup."; return; }
+    if(!parsed || typeof parsed !== "object" || Array.isArray(parsed)){ msg.textContent = "That text is not a valid backup."; return; }
+    var next = {}, n = 0;
+    Object.keys(parsed).forEach(function(k){ if(BYID[k]){ next[k] = norm(parsed[k]); n++; } });
+    if(!n){ msg.textContent = "No lectures found in that backup."; return; }
+    data = next; save();
+    $$(".lec").forEach(function(el){
+      var box = $('[data-role="note"]', el);
+      if(!box.hidden) box.value = get(el.dataset.id).n;
+    });
+    paintAll(); applyFilters();
+    msg.textContent = "Restored " + n + " lectures.";
+  });
+});
+
+$("#btnReset").addEventListener("click", function(){
+  openModal(
+    '<h2 id="mTitle">Reset all progress?</h2>' +
+    '<p>This clears every checkmark, question count and note on this device. If you might want them back, copy a backup first.</p>' +
+    '<div class="row">' +
+      '<button type="button" class="btn" id="rsCancel">Keep my progress</button>' +
+      '<button type="button" class="btn danger" id="rsGo">Reset everything</button>' +
+    '</div>', "#rsCancel");
+  $("#rsCancel").addEventListener("click", closeModal);
+  $("#rsGo").addEventListener("click", function(){
+    data = {}; save();
+    $$('[data-role="note"]').forEach(function(b){ b.value = ""; });
+    paintAll(); applyFilters(); closeModal();
+  });
+});
+
+/* init */
+paintAll();
+applyFilters();
+})();
 </script>
 </body>
 </html>
